@@ -1,3 +1,4 @@
+/*----- constants -----*/
 const pots = ['a', 'b', 'c', 'd', 'e', 'f', 'G', 'h', 'i', 'j', 'k', 'l', 'm', 'N']
 const p1path = ['a', 'b', 'c', 'd', 'e', 'f', 'G', 'h', 'i', 'j', 'k', 'l', 'm']
 const p2path = ['h', 'i', 'j', 'k', 'l', 'm', 'N', 'a', 'b', 'c', 'd', 'e', 'f']
@@ -5,21 +6,38 @@ const p1pots = ['a', 'b', 'c', 'd', 'e', 'f']
 const p2pots = ['m', 'l', 'k', 'j', 'i', 'h']
 const stones = [4, 4, 4, 4, 4, 4, 0, 4, 4, 4, 4, 4, 4, 0]
 
+/*----- app's state (variables) -----*/
+let player, choice, sidx_init, count, path, p1_init, p2_init
+
+/*----- cached element references -----*/
+const tbodyEl = document.querySelector('tbody')
+const h1El = document.querySelector('h1')
+const buttonEl = document.querySelector('button')
+
+/*----- event listeners -----*/
+tbodyEl.addEventListener('click', handlePlayerClick)
+
+buttonEl.addEventListener('click', function (evt) {
+    init()
+})
+
+/*----- functions -----*/
+// function init() {
 
 function something(player, choice) {
-    let sidx_init = pots.findIndex(element => element === choice)
-    let count = stones[sidx_init]
+    sidx_init = pots.findIndex(element => element === choice)
+    count = stones[sidx_init]
     stones[sidx_init] = 0
-    let path
+
 
     if (player == true) {
-        let p1_init = p1path.findIndex(element => element === choice)
+        p1_init = p1path.findIndex(element => element === choice)
         for (i = 0; i < p1_init; i++) {
             p1path.push(p1path.shift())
         }
         path = p1path
     } else {
-        let p2_init = p2path.findIndex(element => element === choice)
+        p2_init = p2path.findIndex(element => element === choice)
         for (i = 0; i < p2_init; i++) {
             p2path.push(p2path.shift())
         }

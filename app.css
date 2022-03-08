@@ -9,9 +9,24 @@
     background: black;
   }
 
+  #p1buttons, #p2buttons {
+    border: 2px solid red;
+    margin: 0 260px 0 260px;
+    height: 3%;  
+    display: flex;
+    gap: 70px;
+    /* justify-content: space-around; */
+  }
+  #p1buttons > button {
+    flex: 1 1 auto;
+  }
+  #p2buttons > button {
+    flex: 1 1 auto;
+  }
+
   #container {
       border: 2px solid red;
-      margin: 50px;
+      margin: 0 50px 0 50px;
       padding: 20px;
       height: 40%;  
       display: flex;
