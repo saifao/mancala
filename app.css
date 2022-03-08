@@ -1,0 +1,60 @@
+* {
+    box-sizing: border-box;
+  }
+  
+  body {
+    margin: 0;
+    font-family: Helvetica;
+    height: 100vh;
+    background: black;
+  }
+
+  #container {
+      border: 2px solid red;
+      margin: 50px;
+      padding: 20px;
+      height: 40%;  
+      display: flex;
+      gap: 20px;
+  }
+
+  #p1bank, #p2bank {
+    border: 2px solid red;
+    flex: 1 1 auto;
+  }
+
+  #pots {
+    border: 2px solid red;
+    flex: 4 4 auto;
+    /* display: flex;
+    flex-direction: column;  */
+    display: grid;
+    grid-template-columns: 1 fr;
+    grid-template-rows: repeat(2, 1fr);;
+  }
+
+  #p1pots, #p2pots {
+    margin: 10px;
+    padding: 10px 0;
+    /* border: 2px solid yellow; */
+    /* flex: 1 1 auto; */
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: 1fr;
+    column-gap: 10px;
+    /* gap: 20px; */
+  }
+
+  #p1pots > div {
+      background: red;
+      border: 2px solid yellow;
+      flex: 1 1 auto;
+      border-radius: 50%;
+  }
+  #p2pots > div {
+    background: red;
+    border: 2px solid yellow;
+    flex: 1 1 auto;
+    border-radius: 50%;
+}
+  
