@@ -7,31 +7,69 @@ const p2pots = ['m', 'l', 'k', 'j', 'i', 'h']
 const stones = [4, 4, 4, 4, 4, 4, 0, 4, 4, 4, 4, 4, 4, 0]
 
 /*----- app's state (variables) -----*/
-let player, choice, turn, sidx_init, count, path, p1_init, p2_init
+let player, choice, turn, sidx_init, count, path, p1_init, p2_init, p1tot, p2tot
 
-/*----- cached element references and add event listeners -----*/
+/*----- cached element references -----*/
+let h1El = document.querySelector('h1')
+let h3El = document.querySelector('h3')
+let pot1a = document.getElementById('1a')
+let pot1b = document.getElementById('1b')
+let pot1c = document.getElementById('1c')
+let pot1d = document.getElementById('1d')
+let pot1e = document.getElementById('1e')
+let pot1f = document.getElementById('1f')
+let pot2m = document.getElementById('2m')
+let pot2l = document.getElementById('2l')
+let pot2k = document.getElementById('2k')
+let pot2j = document.getElementById('2j')
+let pot2i = document.getElementById('2i')
+let pot2h = document.getElementById('2h')
+let p1bank = document.getElementById('p1bank')
+let p2bank = document.getElementById('p2bank')
+
+/*----- event listeners -----*/
 document.getElementById('pots').addEventListener('click', (evt) => render(evt))
-
 
 /*----- functions -----*/
 // function init() {
+//     }
 
 function render(evt) {
     player = parseInt(evt.target.id[0])
     choice = evt.target.id[1]
     if (isNaN(player)) {
-        return 'Whoops! You are clicking outside the pots!';
+        alert('Whoops! You have to click the pots!')
     } else {
         if (turn != 1 && turn != 2) {
             turn = player
-            console.log(`first move by player ${turn}`)
+            h3El.innerText = `First Move By Player ${player}. Nice!`
         }
         if (turn === player) {
+
             playTurn(player, choice)
+            checkWin()
         }
-        console.log(`Player ${turn}'s turn to move!`)
     }
 }
+
+function checkWin() {
+    // const asdf = stones.reduce((p1tot, potStones, sIdx) => {
+    //     while (sIdx <= 5) {
+    //         p1tot += potStones
+    //     }
+    // })
+    // console.log(asdf)
+    p1tot = stones[0] + stones[1] + stones[2] + stones[3] + stones[4] + stones[5]
+    p2tot = stones[7] + stones[8] + stones[9] + stones[10] + stones[11] + stones[12]
+    if (p1tot === 0 || p2tot === 0) {
+        if (p1tot > p2tot) {
+            h3El.innerText = 'Player 1 Wins!'
+        } else {
+            h3El.innerText = 'Player 2 Wins!'
+        }
+    }
+}
+
 function playTurn(player, choice) {
     sidx_init = pots.findIndex(element => element === choice)
     count = stones[sidx_init]
@@ -39,8 +77,9 @@ function playTurn(player, choice) {
 
     if (player === 1) {
         if (count > 0 && p1pots.includes(pots[sidx_init + count]) && stones[sidx_init + count] === 0) {
-            stones[sidx_init + count] = stones[12 - p1pots.findIndex(e => e === pots[sidx_init + count])]
+            stones[6] += stones[12 - p1pots.findIndex(e => e === pots[sidx_init + count])] + 1
             stones[12 - p1pots.findIndex(e => e === pots[sidx_init + count])] = 0
+            stones[sidx_init + count] -= 1
         }
         p1_init = p1path.findIndex(element => element === choice)
         for (i = 0; i < p1_init; i++) {
@@ -49,10 +88,12 @@ function playTurn(player, choice) {
         path = p1path
         addStones(player, path, count)
         turn = changeTurn(turn)
+
     } else if (player === 2) {
         if (count > 0 && p2pots.includes(pots[sidx_init + count]) && stones[sidx_init + count] === 0) {
-            stones[sidx_init + count] = stones[p2pots.findIndex(e => e === pots[sidx_init + count])]
+            stones[13] += stones[p2pots.findIndex(e => e === pots[sidx_init + count])] + 1
             stones[p2pots.findIndex(e => e === pots[sidx_init + count])] = 0
+            stones[sidx_init + count] -= 1
         }
         p2_init = p2path.findIndex(element => element === choice)
         for (i = 0; i < p2_init; i++) {
@@ -61,9 +102,24 @@ function playTurn(player, choice) {
         path = p2path
         addStones(player, path, count)
         turn = changeTurn(turn)
-    }
-}
 
+    }
+    h1El.innerText = `Player ${turn}'s turn!`
+    pot1a.innerText = stones[0]
+    pot1b.innerText = stones[1]
+    pot1c.innerText = stones[2]
+    pot1d.innerText = stones[3]
+    pot1e.innerText = stones[4]
+    pot1f.innerText = stones[5]
+    p1bank.innerText = stones[6]
+    pot2h.innerText = stones[7]
+    pot2i.innerText = stones[8]
+    pot2j.innerText = stones[9]
+    pot2k.innerText = stones[10]
+    pot2l.innerText = stones[11]
+    pot2m.innerText = stones[12]
+    p2bank.innerHTML = stones[13]
+}
 
 function addStones(player, path, count) {
     for (let i = 1; i <= count; i++) {
