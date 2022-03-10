@@ -2,4 +2,4 @@
 
 https://saifao.github.io/mancala/
 
-(images/test.png)
+![test](images/test.png)
