@@ -4,10 +4,10 @@ const p1path = ['a', 'b', 'c', 'd', 'e', 'f', 'G', 'h', 'i', 'j', 'k', 'l', 'm']
 const p2path = ['h', 'i', 'j', 'k', 'l', 'm', 'N', 'a', 'b', 'c', 'd', 'e', 'f']
 const p1pots = ['a', 'b', 'c', 'd', 'e', 'f']
 const p2pots = ['m', 'l', 'k', 'j', 'i', 'h']
-const stones = [4, 4, 4, 4, 4, 4, 0, 4, 4, 4, 4, 4, 4, 0]
+let stones = [4, 4, 4, 4, 4, 4, 0, 4, 4, 4, 4, 4, 4, 0]
 
 /*----- app's state (variables) -----*/
-let player, choice, turn, sidx_init, count, path, p1_init, p2_init, p1tot, p2tot
+let player, choice, turn, sidx_init, count, path, p1_init, p2_init, p1tot, p2tot, winner
 
 /*----- cached element references -----*/
 let h1El = document.querySelector('h1')
@@ -29,81 +29,40 @@ let p2bank = document.getElementById('p2bank')
 
 /*----- event listeners -----*/
 document.getElementById('pots').addEventListener('click', (evt) => render(evt))
+document.querySelector('button').addEventListener('click', () => reset())
 
 /*----- functions -----*/
 // function init() {
 //     }
 
 function render(evt) {
+
     player = parseInt(evt.target.id[0])
     choice = evt.target.id[1]
     if (isNaN(player)) {
         alert('Whoops! You have to click the pots!')
     } else {
-        if (turn != 1 && turn != 2) {
-            turn = player
-            h3El.innerText = `First Move By Player ${player}. Nice!`
-        }
-        if (turn === player) {
+        if (!turn) {
+            if (player === 1) {
 
-            playTurn(player, choice)
+                playTurn(player, choice, 1)
+                turn = 2
+            } else if (player === 2) {
+
+                playTurn(player, choice, 2)
+                turn = 1
+            }
+            changeHtml(turn)
+            h3El.innerText = `First Move By Player ${player}. Nice!`
+        } else {
+            turn = playTurn(player, choice, turn)
+            changeHtml(turn)
             checkWin()
         }
     }
 }
 
-function checkWin() {
-    // const asdf = stones.reduce((p1tot, potStones, sIdx) => {
-    //     while (sIdx <= 5) {
-    //         p1tot += potStones
-    //     }
-    // })
-    // console.log(asdf)
-    p1tot = stones[0] + stones[1] + stones[2] + stones[3] + stones[4] + stones[5]
-    p2tot = stones[7] + stones[8] + stones[9] + stones[10] + stones[11] + stones[12]
-    if (p1tot === 0 || p2tot === 0) {
-        if (p1tot > p2tot) {
-            h3El.innerText = 'Player 1 Wins!'
-        } else {
-            h3El.innerText = 'Player 2 Wins!'
-        }
-    }
-}
-
-function playTurn(player, choice) {
-    sidx_init = pots.findIndex(element => element === choice)
-    count = stones[sidx_init]
-    stones[sidx_init] = 0
-
-    if (player === 1) {
-        if (count > 0 && p1pots.includes(pots[sidx_init + count]) && stones[sidx_init + count] === 0) {
-            stones[6] += stones[12 - p1pots.findIndex(e => e === pots[sidx_init + count])] + 1
-            stones[12 - p1pots.findIndex(e => e === pots[sidx_init + count])] = 0
-            stones[sidx_init + count] -= 1
-        }
-        p1_init = p1path.findIndex(element => element === choice)
-        for (i = 0; i < p1_init; i++) {
-            p1path.push(p1path.shift())
-        }
-        path = p1path
-        addStones(player, path, count)
-        turn = changeTurn(turn)
-
-    } else if (player === 2) {
-        if (count > 0 && p2pots.includes(pots[sidx_init + count]) && stones[sidx_init + count] === 0) {
-            stones[13] += stones[p2pots.findIndex(e => e === pots[sidx_init + count])] + 1
-            stones[p2pots.findIndex(e => e === pots[sidx_init + count])] = 0
-            stones[sidx_init + count] -= 1
-        }
-        p2_init = p2path.findIndex(element => element === choice)
-        for (i = 0; i < p2_init; i++) {
-            p2path.push(p2path.shift())
-        }
-        path = p2path
-        addStones(player, path, count)
-        turn = changeTurn(turn)
-
-    }
+function changeHtml(turn) {
     h1El.innerText = `Player ${turn}'s turn!`
     pot1a.innerText = stones[0]
     pot1b.innerText = stones[1]
@@ -118,7 +77,71 @@ function playTurn(player, choice) {
     pot2k.innerText = stones[10]
     pot2l.innerText = stones[11]
     pot2m.innerText = stones[12]
-    p2bank.innerHTML = stones[13]
+    p2bank.innerText = stones[13]
+}
+
+function checkWin() {
+    p1PotsTotal = stones[0] + stones[1] + stones[2] + stones[3] + stones[4] + stones[5]
+    p2PotsTotal = stones[7] + stones[8] + stones[9] + stones[10] + stones[11] + stones[12]
+    p1Score = stones[6]
+    p2Score = stones[13]
+    if (p1PotsTotal === 0 || p2PotsTotal === 0) {
+        if (p1Score > p2Score) {
+            winner = '1'
+            h1El.innerText = 'Player 1 Wins!'
+            h3El.innerText = 'Hit Reset to Play Mancala again!'
+        } else if (p1Score < p2Score) {
+            winner = '2'
+            h1El.innerText = 'Player 2 Wins!'
+            h3El.innerText = 'Hit Reset to Play Mancala again!'
+        } else {
+            winner = 'tie'
+            h1El.innerText = 'Both Players Tie!'
+            h3El.innerText = 'Hit Reset to Play Mancala again!'
+        }
+    }
+}
+
+function playTurn(player, choice, turn) {
+    if (!winner) {
+        if (player === turn) {
+            sidx_init = pots.findIndex(element => element === choice)
+            count = stones[sidx_init]
+            stones[sidx_init] = 0
+
+            if (player === 1) {
+                if (count > 0 && p1pots.includes(pots[sidx_init + count]) && stones[sidx_init + count] === 0) {
+                    stones[6] += stones[12 - p1pots.findIndex(e => e === pots[sidx_init + count])] + 1
+                    stones[12 - p1pots.findIndex(e => e === pots[sidx_init + count])] = 0
+                    stones[sidx_init + count] -= 1
+                }
+                p1_init = p1path.findIndex(element => element === choice)
+                for (i = 0; i < p1_init; i++) {
+                    p1path.push(p1path.shift())
+                }
+                path = p1path
+                addStones(player, path, count)
+                return turn = changeTurn(turn)
+
+            } else if (player === 2) {
+                if (count > 0 && p2pots.includes(pots[sidx_init + count]) && stones[sidx_init + count] === 0) {
+                    stones[13] += stones[p2pots.findIndex(e => e === pots[sidx_init + count])] + 1
+                    stones[p2pots.findIndex(e => e === pots[sidx_init + count])] = 0
+                    stones[sidx_init + count] -= 1
+                }
+                p2_init = p2path.findIndex(element => element === choice)
+                for (i = 0; i < p2_init; i++) {
+                    p2path.push(p2path.shift())
+                }
+                path = p2path
+                addStones(player, path, count)
+                return turn = changeTurn(turn)
+
+            }
+
+        }
+        return turn
+    }
 }
 
 function addStones(player, path, count) {
@@ -129,9 +152,21 @@ function addStones(player, path, count) {
 
 function changeTurn(turn) {
     if (turn === 1) {
+        console.log('changeTurn loop 1' + turn)
         return 2;
     } else if (turn === 2) {
+        console.log('changeTurn loop 2' + turn)
         return 1;
     }
+
+}
+
+function reset() {
+    winner = undefined
+    turn = undefined
+    stones = [4, 4, 4, 4, 4, 4, 0, 4, 4, 4, 4, 4, 4, 0]
+    changeHtml()
+    h1El.innerText = 'Play Mancala!'
+    h3El.innerText = 'Somebody make a move!'
 }
 
