@@ -7,7 +7,7 @@ const p2pots = ['m', 'l', 'k', 'j', 'i', 'h']
 let stones = [4, 4, 4, 4, 4, 4, 0, 4, 4, 4, 4, 4, 4, 0]
 
 /*----- app's state (variables) -----*/
-let player, choice, turn, sidx_init, count, path, p1_init, p2_init, p1tot, p2tot, winner
+let player, choice, turn, sidx_init, count, path, p1_init, p2_init, p1tot, p2tot, winner, token
 
 /*----- cached element references -----*/
 let h1El = document.querySelector('h1')
@@ -32,8 +32,9 @@ document.getElementById('pots').addEventListener('click', (evt) => render(evt))
 document.querySelector('button').addEventListener('click', () => reset())
 
 /*----- functions -----*/
-// function init() {
-//     }
+function init() {
+    token = 'normal'
+}
 
 function render(evt) {
 
@@ -55,7 +56,8 @@ function render(evt) {
             changeHtml(turn)
             h3El.innerText = `First Move By Player ${player}. Nice!`
         } else {
-            turn = playTurn(player, choice, turn)
+            [turn, token] = playTurn(player, choice, turn)
+            console.log(turn + ' ' + token)
             changeHtml(turn)
             checkWin()
         }
@@ -109,11 +111,14 @@ function playTurn(player, choice, turn) {
             count = stones[sidx_init]
             stones[sidx_init] = 0
 
-            if (player === 1) {
-                if (count > 0 && p1pots.includes(pots[sidx_init + count]) && stones[sidx_init + count] === 0) {
+            if (player === 1 && count > 0) {
+                if (p1pots.includes(pots[sidx_init + count]) && stones[sidx_init + count] === 0 && stones[12 - p1pots.findIndex(e => e === pots[sidx_init + count])] !== 0) {
                     stones[6] += stones[12 - p1pots.findIndex(e => e === pots[sidx_init + count])] + 1
                     stones[12 - p1pots.findIndex(e => e === pots[sidx_init + count])] = 0
                     stones[sidx_init + count] -= 1
+                    token = 'repeat'
+                } else if (sidx_init + count === 6) {
+                    token = 'repeat'
                 }
                 p1_init = p1path.findIndex(element => element === choice)
                 for (i = 0; i < p1_init; i++) {
@@ -121,13 +126,16 @@ function playTurn(player, choice, turn) {
                 }
                 path = p1path
                 addStones(player, path, count)
-                return turn = changeTurn(turn)
+                return [turn, token] = changeTurn(turn, token)
 
-            } else if (player === 2) {
-                if (count > 0 && p2pots.includes(pots[sidx_init + count]) && stones[sidx_init + count] === 0) {
+            } else if (player === 2 && count > 0) {
+                if (p2pots.includes(pots[sidx_init + count]) && stones[sidx_init + count] === 0 && stones[p2pots.findIndex(e => e === pots[sidx_init + count])] !== 0) {
                     stones[13] += stones[p2pots.findIndex(e => e === pots[sidx_init + count])] + 1
                     stones[p2pots.findIndex(e => e === pots[sidx_init + count])] = 0
                     stones[sidx_init + count] -= 1
+                    token = 'repeat'
+                } else if (sidx_init + count === 13) {
+                    token = 'repeat'
                 }
                 p2_init = p2path.findIndex(element => element === choice)
                 for (i = 0; i < p2_init; i++) {
@@ -135,10 +143,8 @@ function playTurn(player, choice, turn) {
                 }
                 path = p2path
                 addStones(player, path, count)
-                return turn = changeTurn(turn)
-
+                return [turn, token] = changeTurn(turn, token)
             }
-
         }
         return turn
     }
@@ -150,13 +156,19 @@ function addStones(player, path, count) {
     }
 }
 
-function changeTurn(turn) {
-    if (turn === 1) {
-        console.log('changeTurn loop 1' + turn)
-        return 2;
-    } else if (turn === 2) {
-        console.log('changeTurn loop 2' + turn)
-        return 1;
+function changeTurn(turn, token) {
+    if (turn === 1 && token === 'normal') {
+        // console.log('changeTurn loop 1norm')
+        return [2, 'normal'];
+    } else if (turn === 2 && token === 'normal') {
+        // console.log('changeTurn loop 2norm')
+        return [1, 'normal'];
+    } else if (turn === 1 && token === 'repeat') {
+        // console.log('changeTurn loop 1rep')
+        return [1, 'normal'];
+    } else if (turn === 2 && token === 'repeat') {
+        // console.log('changeTurn loop 2rep')
+        return [2, 'normal'];
     }
 
 }
@@ -170,3 +182,4 @@ function reset() {
     h3El.innerText = 'Somebody make a move!'
 }
 
+init()
