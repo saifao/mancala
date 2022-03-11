@@ -47,4 +47,6 @@ Having deposited their last stone in the bank (again!), Player 1 repeats their t
 
 ### Next Steps
 - use of figures that look like multi-colored stones instead of numbers
+- use flexbox and grid to make the view more responsive to viewport size (including mobile)
+- code CSS to make the game look more life-like
 - use JQuery to simplify the code
