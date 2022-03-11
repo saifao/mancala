@@ -44,3 +44,7 @@ Having deposited their last stone in the bank, Player 1 repeats their turn and w
 
 Having deposited their last stone in the bank (again!), Player 1 repeats their turn and will play their left-most pot containing 1 stone. This will allow them to steal Player 2's 6 stones that sit directly across from where Player 1's last stone will land. Ultimately these 7 stones are added to Player 1's bank.
 ![Player 1 plays 5 stones](images/p1_repeat_3.png)
+
+### Next Steps
+- use of figures that look like multi-colored stones instead of numbers
+- use JQuery to simplify the code
