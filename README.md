@@ -2,6 +2,9 @@
 
 Mancala is an ancient game played all over the world!
 
+### Technologies Used
+- JavaScript, HTML, CSS
+
 ### Rules
 - Two opposing players. Player 1 or Player 2 can go first
 - Each player starts with 6 pots each containing 4 stones
@@ -14,6 +17,10 @@ Mancala is an ancient game played all over the world!
 - In the event that the last stone is placed in an EMPTY pot on their OWN side, the player captures the stones in the opponent's pot DIRECTLY ACROSS and all stones (including the player's last stone) are transferred to the bank. In this case, if the opponent's pot is empty then this rule doesn't apply.
 - The game ends when either player's pots (all 6) are empty
 
-https://saifao.github.io/mancala/
+### Play Now!
+- https://saifao.github.io/mancala/
 
-![test](images/test.png)
+### Examples of Game States
+
+This is how the game starts
+![test](images/start.png)
