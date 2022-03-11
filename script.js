@@ -7,7 +7,7 @@ const p2pots = ['m', 'l', 'k', 'j', 'i', 'h']
 let stones = [4, 4, 4, 4, 4, 4, 0, 4, 4, 4, 4, 4, 4, 0]
 
 /*----- app's state (variables) -----*/
-let player, choice, turn, sidx_init, count, path, p1_init, p2_init, p1tot, p2tot, winner, token
+let player, choice, turn, sidx_init, count, path, p1_init, p2_init, winner, token
 
 /*----- cached element references -----*/
 let h1El = document.querySelector('h1')
@@ -37,34 +37,30 @@ function init() {
 }
 
 function render(evt) {
-
     player = parseInt(evt.target.id[0])
     choice = evt.target.id[1]
     if (isNaN(player)) {
-        alert('Whoops! You have to click the pots!')
+        h1El.innerText = 'Whoops! You have to click the pots!'
     } else {
         if (!turn) {
             if (player === 1) {
-
                 playTurn(player, choice, 1)
                 turn = 2
             } else if (player === 2) {
-
                 playTurn(player, choice, 2)
                 turn = 1
             }
-            changeHtml(turn)
+            updateView(turn)
             h3El.innerText = `First Move By Player ${player}. Nice!`
         } else {
             [turn, token] = playTurn(player, choice, turn)
-            console.log(turn + ' ' + token)
-            changeHtml(turn)
+            updateView(turn)
             checkWin()
         }
     }
 }
 
-function changeHtml(turn) {
+function updateView(turn) {
     h1El.innerText = `Player ${turn}'s turn!`
     pot1a.innerText = stones[0]
     pot1b.innerText = stones[1]
@@ -158,28 +154,24 @@ function addStones(player, path, count) {
 
 function changeTurn(turn, token) {
     if (turn === 1 && token === 'normal') {
-        // console.log('changeTurn loop 1norm')
         return [2, 'normal'];
     } else if (turn === 2 && token === 'normal') {
-        // console.log('changeTurn loop 2norm')
         return [1, 'normal'];
     } else if (turn === 1 && token === 'repeat') {
-        // console.log('changeTurn loop 1rep')
         return [1, 'normal'];
     } else if (turn === 2 && token === 'repeat') {
-        // console.log('changeTurn loop 2rep')
         return [2, 'normal'];
     }
-
 }
 
 function reset() {
     winner = undefined
     turn = undefined
     stones = [4, 4, 4, 4, 4, 4, 0, 4, 4, 4, 4, 4, 4, 0]
-    changeHtml()
+    updateView()
     h1El.innerText = 'Play Mancala!'
     h3El.innerText = 'Somebody make a move!'
+    init()
 }
 
 init()
