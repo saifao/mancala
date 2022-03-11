@@ -17,7 +17,7 @@ Mancala is an ancient game played all over the world!
 9. In the event that the last stone is placed in an EMPTY pot on their OWN side, the player captures the stones in the opponent's pot DIRECTLY ACROSS and all stones (including the player's last stone) are transferred to the bank. In this case, if the opponent's pot is empty then this rule doesn't apply.
 10. The game ends when either player's pots (all 6) are empty
 
-### Play Now!
+### Getting Started!
 - https://saifao.github.io/mancala/
 
 ### Examples of Game States
