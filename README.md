@@ -8,7 +8,7 @@ Mancala is an ancient game played all over the world!
 ### Rules
 1. Two opposing players. Player 1 or Player 2 can go first
 2. Each player starts with 6 pots each containing 4 stones
-3. The objective is to have the most stones when the game ends
+3. The objective is to have the most stones in the bank when the game ends
 4. Each player has 6 pots (circle)
 5. Each player has 1 bank (box)
 6. On each turn each player will distribute ALL stones from ONE pot placing ONE stone in each of the following pots in sequence.
