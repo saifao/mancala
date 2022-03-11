@@ -1,6 +1,6 @@
 # mancala
 
-Mancala is an ancient game played all over the world! In our game the red circles are the pots, whilst the squares on either end represent the banks! The numbers represent the number of stones contained within each pot/bank. The objective of this version of Mancala is the same as all versions of Mancala, finish the game with the most stone (or in our case, the highest number in your bank!)
+Mancala is an ancient game played all over the world! In our game the red circles are the pots, whilst the squares on either end represent the banks! The numbers represent the number of stones contained within each pot/bank. The objective of this version of Mancala is the same as all versions of Mancala, finish the game with the most stones (or in our case, the highest number in your bank!)
 
 ### Technologies Used
 - JavaScript, HTML, CSS
