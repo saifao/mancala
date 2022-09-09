@@ -42,7 +42,7 @@ function render(evt) {
     if (isNaN(player)) {
         h1El.innerText = 'Whoops! You have to click the pots!'
     } else {
-        if (!turn) {
+        if (!turn) {    //on first move turn will not be assigned hence falsy
             if (player === 1) {
                 playTurn(player, choice, 1)
                 turn = 2
@@ -107,10 +107,15 @@ function playTurn(player, choice, turn) {
             count = stones[sidx_init]
             stones[sidx_init] = 0
 
+            // if there are actually stones in the pot chosen
             if (player === 1 && count > 0) {
+                // if the pot in which the last stone will land belongs to p1pots && number of stones in that pot === 0 && number of stones in the pot opposite is not zero then...
                 if (p1pots.includes(pots[sidx_init + count]) && stones[sidx_init + count] === 0 && stones[12 - p1pots.findIndex(e => e === pots[sidx_init + count])] !== 0) {
+                    // number of stones in the pot opposite goes to the player1's bank (stones[6]) plus last stone that landed 
                     stones[6] += stones[12 - p1pots.findIndex(e => e === pots[sidx_init + count])] + 1
+                    // number of stones in the pot opposite is reduced to zero
                     stones[12 - p1pots.findIndex(e => e === pots[sidx_init + count])] = 0
+                    // Number of stones in pot where last stone landed is decrement by 1 to offset the increment by 1 which happens later at addStones(player, path, count). 
                     stones[sidx_init + count] -= 1
                     token = 'repeat'
                 } else if (sidx_init + count === 6) {
@@ -122,6 +127,7 @@ function playTurn(player, choice, turn) {
                 }
                 path = p1path
                 addStones(player, path, count)
+                // New turn is determined correctly (depending on if token passed to changeTurn is repeat or not). Token returned will be 'normal' which is important because otherwise value of token will remain 'repeat' and so changeTurn will always determine that the same player should play again and again and again since turn only changes when token is normal not repeat.
                 return [turn, token] = changeTurn(turn, token)
 
             } else if (player === 2 && count > 0) {
@@ -148,6 +154,7 @@ function playTurn(player, choice, turn) {
 
 function addStones(player, path, count) {
     for (let i = 1; i <= count; i++) {
+        // given the path, add one stone to each pot, altering the stones array via the pots array for which the indexes line up
         stones[pots.findIndex(element => element === path[i])]++
     }
 }
